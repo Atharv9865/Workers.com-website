@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workers.com - Find Skilled Workers Near You</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
+          crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-default">
+    <!-- Header Section -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-hard-hat"></i>
+                <span>Workers.com</span>
+            </div>
+            <button class="btn btn-outline back-btn" id="backBtn" style="display: none;">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <nav>
+                <ul>
+                    <li><a href="#" class="nav-link" data-section="home-section">Home</a></li>
+                    <li><a href="#" class="nav-link" data-section="about-section">About</a></li>
+                    <li><a href="#" class="nav-link" data-section="services-section">Services</a></li>
+                    <li><a href="#" class="nav-link" data-section="contact-section">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <button class="btn btn-outline" id="loginBtn">Login</button>
+                <button class="btn btn-primary" id="signupBtn">Sign Up</button>
+                <div class="user-menu" id="userMenu" style="display: none;">
+                    <span id="userName">User</span>
+                    <div class="user-dropdown">
+                        <a href="#" data-section="dashboard-section">Dashboard</a>
+                        <a href="#" id="logoutBtn">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Home Section -->
+    <section class="section active section-default" id="home-section">
+        <div class="hero">
+            <div class="container">
+                <h1>Find Skilled Workers for Any Task</h1>
+                <p>Connect with reliable professionals for plumbing, painting, shifting, electrical work and more. Book instantly with our verified workers.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary btn-large" id="findWorkerBtn">
+                        <i class="fas fa-search"></i> Find a Worker
+                    </button>
+                    <button class="btn btn-outline btn-large" data-section="about-section">
+                        <i class="fas fa-play-circle"></i> How It Works
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div style="padding: 4rem 0; text-align: center;">
+                <h2 style="margin-bottom: 1rem;">How Workers.com Works</h2>
+                <p style="max-width: 800px; margin: 0 auto 3rem;">Our platform makes it easy to find and hire skilled workers for any task, big or small.</p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>Search</h3>
+                        <p>Find the right worker for your specific needs</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <h3>Compare</h3>
+                        <p>View ratings, reviews, and pricing</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <h3>Book</h3>
+                        <p>Schedule an appointment that works for you</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3>Rate</h3>
+                        <p>Share your experience to help others</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Find Worker Section -->
+    <section class="section section-default" id="find-worker-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>What type of service do you need?</h2>
+                <p>Select the option that best fits your requirements</p>
+            </div>
+
+            <div class="selection-options">
+                <div class="option-card" data-section="worker-selection-section">
+                    <div class="option-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3>Single Worker</h3>
+                    <p>I need only one worker for immediate service</p>
+                </div>
+                <div class="option-card" data-section="multiple-worker-section">
+                    <div class="option-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Multiple Workers</h3>
+                    <p>I need more than one worker for a larger project</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Worker Selection Section -->
+    <section class="section section-default" id="worker-selection-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Select Your Service Category</h2>
+                <p>Choose the type of service you need immediately</p>
+            </div>
+
+            <div class="service-categories">
+                <div class="card service-card plumbing" data-service="plumbing" data-section="worker-list-section">
+                    <div class="card-icon">
+                        <i class="fas fa-faucet"></i>
+                    </div>
+                    <h3>Plumbing</h3>
+                    <p>Pipe repairs, installations, and more</p>
+                </div>
+                <div class="card service-card painting" data-service="painting" data-section="worker-list-section">
+                    <div class="card-icon">
+                        <i class="fas fa-paint-roller"></i>
+                    </div>
+                    <h3>Painting</h3>
+                    <p>Interior, exterior, and decorative painting</p>
+                </div>
+                <div class="card service-card shifting" data-service="shifting" data-section="worker-list-section">
+                    <div class="card-icon">
+                        <i class="fas fa-truck-moving"></i>
+                    </div>
+                    <h3>Shifting</h3>
+                    <p>Home and office relocation services</p>
+                </div>
+                <div class="card service-card electrical" data-service="electrical" data-section="worker-list-section">
+                    <div class="card-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Electrical</h3>
+                    <p>Wiring, repairs, and installations</p>
+                </div>
+                <div class="card service-card carpentry" data-service="carpentry" data-section="worker-list-section">
+                    <div class="card-icon">
+                        <i class="fas fa-hammer"></i>
+                    </div>
+                    <h3>Carpentry</h3>
+                    <p>Furniture, fixtures, and repairs</p>
+                </div>
+                <div class="card service-card other" data-service="other" data-section="worker-list-section">
+                    <div class="card-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3>Other</h3>
+                    <p>Various home maintenance services</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Worker List Section -->
+    <section class="section section-default" id="worker-list-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Available Workers Right Now</h2>
+                <p>These workers are available for immediate service</p>
+            </div>
+
+            <div class="workers-grid" id="workersGrid">
+                <!-- Worker cards will be dynamically generated -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section class="section section-default" id="booking-section">
+        <div class="container">
+            <div class="booking-container">
+                <div class="booking-header">
+                    <h2>Immediate Service Booking</h2>
+                    <div class="worker-info">
+                        <h3 id="booking-worker-name">Worker Name</h3>
+                        <p id="booking-worker-specialty">Specialty</p>
+                    </div>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                </div>
+
+                <div class="booking-details">
+                    <div>
+                        <h3>Service Details</h3>
+                        <p><strong>Service:</strong> <span id="booking-service">Service</span></p>
+                        <p><strong>Booking Time:</strong> <span id="booking-time">Right Now</span></p>
+                        <p><strong>Service Type:</strong> <span id="booking-type">Immediate Service</span></p>
+                        <p><strong>Your Location:</strong> <span id="booking-address">Detecting your location...</span></p>
+                        <p><strong>Charges:</strong> <span id="booking-charges">₹0</span></p>
+
+                        <div style="margin-top: 2rem;">
+                            <button class="btn btn-success btn-large" id="confirmBookingBtn">
+                                <i class="fas fa-check-circle"></i> Confirm Immediate Booking
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3>Worker Location</h3>
+                        <div class="map-container" id="booking-map">
+                            <div class="location-loading">
+                                <div class="spinner"></div>
+                                <p>Loading your location...</p>
+                            </div>
+                        </div>
+                        <p style="margin-top: 1rem; text-align: center;">
+                            <i class="fas fa-clock"></i>
+                            <span id="arrival-time">Worker will start moving after booking</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Tracking Section -->
+    <section class="section section-default" id="tracking-section">
+        <div class="container">
+            <div class="tracking-container">
+                <div class="tracking-header">
+                    <h2>Worker is on the way!</h2>
+                    <div class="worker-info">
+                        <h3 id="tracking-worker-name">Worker Name</h3>
+                        <p id="tracking-worker-specialty">Specialty</p>
+                    </div>
+                </div>
+
+                <div class="eta-display">
+                    <span id="eta-time">12</span> min
+                </div>
+                <div class="eta-label">Estimated Time of Arrival</div>
+
+                <div class="tracking-map" id="tracking-map">
+                    <div class="location-loading">
+                        <div class="spinner"></div>
+                        <p>Calculating route...</p>
+                    </div>
+                </div>
+
+                <div class="route-info">
+                    <div class="info-card">
+                        <h4>Worker Location</h4>
+                        <p id="worker-location">Location</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>Your Location</h4>
+                        <p id="customer-location">Detecting...</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>Transport</h4>
+                        <p id="transport-mode">Vehicle</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>Distance</h4>
+                        <p id="distance">Calculating...</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>Route Time</h4>
+                        <p id="route-time">Calculating...</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem; text-align: center;">
+                    <button class="btn btn-primary" id="callWorkerBtn">
+                        <i class="fas fa-phone"></i> Call Worker
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rating Section -->
+    <section class="section section-default" id="rating-section">
+        <div class="container">
+            <div class="rating-container">
+                <div class="rating-header">
+                    <h2>Rate Your Experience</h2>
+                    <p>How was your service with <span id="rate-worker-name">Worker Name</span>?</p>
+                </div>
+                
+                <div class="rating-form">
+                    <div class="rating-stars">
+                        <span class="star" data-rating="1">★</span>
+                        <span class="star" data-rating="2">★</span>
+                        <span class="star" data-rating="3">★</span>
+                        <span class="star" data-rating="4">★</span>
+                        <span class="star" data-rating="5">★</span>
+                    </div>
+                    <div class="selected-rating">
+                        <span id="rating-value">0</span> out of 5 stars
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="review-comment">Your Review (Optional)</label>
+                        <textarea id="review-comment" class="form-control" rows="4" placeholder="Share your experience with this worker..."></textarea>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="submitRatingBtn">
+                        <i class="fas fa-star"></i> Submit Rating
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Confirmation Section -->
+    <section class="section section-default" id="confirmation-section">
+        <div class="container">
+            <div class="confirmation-container">
+                <div class="confirmation-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2>Service Completed!</h2>
+                <p>The worker has successfully completed the service at your location.</p>
+                <div style="margin: 2rem 0;">
+                    <p><strong>Worker:</strong> <span id="confirmed-worker">Worker Name</span></p>
+                    <p><strong>Service:</strong> <span id="confirmed-service">Service</span></p>
+                    <p><strong>Completion Time:</strong> <span id="completion-time">Time</span></p>
+                    <p><strong>Total Charges:</strong> <span id="total-charges">₹0</span></p>
+                </div>
+                <div style="margin-top: 2rem;">
+                    <button class="btn btn-primary" data-section="dashboard-section">
+                        <i class="fas fa-tachometer-alt"></i> Go to Dashboard
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Multiple Worker Section -->
+    <section class="section section-default" id="multiple-worker-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Multiple Workers Booking</h2>
+                <p>For larger projects requiring multiple workers</p>
+            </div>
+
+            <div class="booking-container">
+                <form id="multipleWorkerForm">
+                    <div class="form-group">
+                        <label for="projectType">Project Type</label>
+                        <select id="projectType" class="form-control" required>
+                            <option value="">Select project type</option>
+                            <option value="office-shifting">Office Shifting</option>
+                            <option value="home-renovation">Home Renovation</option>
+                            <option value="construction">Construction Work</option>
+                            <option value="event-setup">Event Setup</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="workerCount">Number of Workers Needed</label>
+                        <input type="number" id="workerCount" class="form-control" min="2" max="20" value="2" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="projectDate">Preferred Date</label>
+                        <input type="date" id="projectDate" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="projectDescription">Project Description</label>
+                        <textarea id="projectDescription" class="form-control" rows="4" placeholder="Describe your project requirements..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Find Contractors</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section class="section section-default" id="dashboard-section">
+        <div class="container">
+            <div class="dashboard-header">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <div>
+                        <h2 id="dashboard-greeting">Welcome, User!</h2>
+                        <p>What would you like to do today?</p>
+                    </div>
+                </div>
+                <button class="btn btn-outline" id="dashboardLogoutBtn">Logout</button>
+            </div>
+
+            <div class="dashboard-cards">
+                <div class="card" data-section="find-worker-section">
+                    <div class="card-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Find a Worker</h3>
+                    <p>Search for skilled workers based on your needs</p>
+                </div>
+                <div class="card" id="bookingHistoryCard">
+                    <div class="card-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <h3>Booking History</h3>
+                    <p>View your past and upcoming appointments</p>
+                </div>
+                <div class="card" id="rateWorkersCard">
+                    <div class="card-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>Rate Workers</h3>
+                    <p>Share your experience with our workers</p>
+                </div>
+            </div>
+            
+            <!-- Booking History Section -->
+            <div class="booking-history" id="bookingHistory" style="display: none;">
+                <h3>Your Recent Bookings</h3>
+                <div class="history-list" id="historyList">
+                    <!-- Booking history will be populated here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section section-default" id="about-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>About Workers.com</h2>
+                <p>Learn more about our platform and mission</p>
+            </div>
+            <div style="max-width: 800px; margin: 0 auto;">
+                <p style="margin-bottom: 1.5rem;">Workers.com is a revolutionary platform that connects skilled workers with customers who need their services. Our mission is to make finding reliable professionals for any task as simple as a few clicks.</p>
+
+                <h3 style="margin: 2rem 0 1rem;">Our Vision</h3>
+                <p style="margin-bottom: 1.5rem;">To create a world where everyone has easy access to skilled professionals for any task, big or small, while providing workers with fair opportunities and recognition for their expertise.</p>
+
+                <h3 style="margin: 2rem 0 1rem;">Why Choose Workers.com?</h3>
+                <ul style="margin-left: 1.5rem; margin-bottom: 2rem;">
+                    <li style="margin-bottom: 0.5rem;">Verified and background-checked workers</li>
+                    <li style="margin-bottom: 0.5rem;">Transparent pricing with no hidden costs</li>
+                    <li style="margin-bottom: 0.5rem;">Real-time tracking of worker arrival</li>
+                    <li style="margin-bottom: 0.5rem;">Secure payment system</li>
+                    <li style="margin-bottom: 0.5rem;">Customer reviews and ratings</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="section section-default" id="services-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Services</h2>
+                <p>We offer a wide range of services to meet all your home and business needs</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2rem;">
+                <div class="card service-card plumbing">
+                    <div class="card-icon">
+                        <i class="fas fa-faucet"></i>
+                    </div>
+                    <h3>Plumbing</h3>
+                    <p>Pipe repairs, installations, leak detection, and more</p>
+                </div>
+                <div class="card service-card painting">
+                    <div class="card-icon">
+                        <i class="fas fa-paint-roller"></i>
+                    </div>
+                    <h3>Painting</h3>
+                    <p>Interior, exterior, and decorative painting services</p>
+                </div>
+                <div class="card service-card shifting">
+                    <div class="card-icon">
+                        <i class="fas fa-truck-moving"></i>
+                    </div>
+                    <h3>Shifting</h3>
+                    <p>Home and office relocation with careful handling</p>
+                </div>
+                <div class="card service-card electrical">
+                    <div class="card-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Electrical Work</h3>
+                    <p>Wiring, repairs, installations, and safety checks</p>
+                </div>
+                <div class="card service-card carpentry">
+                    <div class="card-icon">
+                        <i class="fas fa-hammer"></i>
+                    </div>
+                    <h3>Carpentry</h3>
+                    <p>Furniture making, repairs, and custom woodwork</p>
+                </div>
+                <div class="card service-card other">
+                    <div class="card-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3>General Repairs</h3>
+                    <p>Various home maintenance and repair services</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section section-default" id="contact-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Contact Us</h2>
+                <p>Have questions or need assistance? Our team is here to help you.</p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem;">
+                <div>
+                    <h3 style="margin-bottom: 1.5rem;">Get In Touch</h3>
+                    <p style="margin-bottom: 1.5rem;">Have questions or need assistance? Our team is here to help you.</p>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h4><i class="fas fa-map-marker-alt"></i> Address</h4>
+                        <p>123 Business Avenue, Mumbai, India</p>
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h4><i class="fas fa-phone"></i> Phone</h4>
+                        <p>+91 98765 43210</p>
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h4><i class="fas fa-envelope"></i> Email</h4>
+                        <p>support@workers.com</p>
+                    </div>
+
+                    <div>
+                        <h4><i class="fas fa-headset"></i> Helpline</h4>
+                        <p style="font-size: 1.5rem; font-weight: bold; color: var(--primary);">1800-123-4567</p>
+                        <p>Available 24/7 for customer support</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 style="margin-bottom: 1.5rem;">Send Us a Message</h3>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="contactName">Your Name</label>
+                            <input type="text" id="contactName" class="form-control" placeholder="Enter your name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactEmail">Email Address</label>
+                            <input type="email" id="contactEmail" class="form-control" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactSubject">Subject</label>
+                            <input type="text" id="contactSubject" class="form-control" placeholder="Enter subject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactMessage">Message</label>
+                            <textarea id="contactMessage" class="form-control" rows="5" placeholder="Enter your message" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Authentication Section -->
+    <section class="auth-section" id="authSection">
+        <div class="auth-container">
+            <button class="close-auth" id="closeAuth">&times;</button>
+            <div class="auth-tabs">
+                <div class="auth-tab active" id="loginTab">Login</div>
+                <div class="auth-tab" id="signupTab">Sign Up</div>
+            </div>
+            <div class="auth-form">
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" class="form-control" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+                </form>
+                <form id="signupForm" style="display: none;">
+                    <div class="form-group">
+                        <label for="signupName">Full Name</label>
+                        <input type="text" id="signupName" class="form-control" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupEmail">Email</label>
+                        <input type="email" id="signupEmail" class="form-control" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <input type="password" id="signupPassword" class="form-control" placeholder="Create a password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPhone">Phone Number</label>
+                        <input type="tel" id="signupPhone" class="form-control" placeholder="Enter your phone number" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Sign Up</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About Workers.com</h3>
+                    <p>Workers.com is a platform connecting skilled workers with customers who need their services. We ensure quality, reliability, and transparency in every transaction.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#" class="nav-link" data-section="home-section">Home</a></li>
+                        <li><a href="#" class="nav-link" data-section="about-section">About Us</a></li>
+                        <li><a href="#" class="nav-link" data-section="services-section">Services</a></li>
+                        <li><a href="#" class="nav-link" data-section="contact-section">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#" class="nav-link" data-section="services-section">Plumbing</a></li>
+                        <li><a href="#" class="nav-link" data-section="services-section">Painting</a></li>
+                        <li><a href="#" class="nav-link" data-section="services-section">Shifting</a></li>
+                        <li><a href="#" class="nav-link" data-section="services-section">Electrical Work</a></li>
+                        <li><a href="#" class="nav-link" data-section="services-section">Carpentry</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Business Avenue, Mumbai</li>
+                        <li><i class="fas fa-phone"></i> +91 98765 43210</li>
+                        <li><i class="fas fa-envelope"></i> support@workers.com</li>
+                    </ul>
+                    <div style="margin-top: 1.5rem;">
+                        <h4>Helpline</h4>
+                        <p style="font-size: 1.5rem; font-weight: bold; color: var(--accent);">1800-123-4567</p>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Workers.com. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- External Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+    <script src="app.js"></script>
+</body>
+</html> 
